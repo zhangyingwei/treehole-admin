@@ -5,6 +5,9 @@ import VueRouter from 'vue-router';
 import heyuiConfig from './js/config/heyui-config';
 import routerConfig from './js/config/router-config';
 
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+
 require('./css/app.less');
 
 //HeyUI已经设定为全局变量，无需引用
@@ -14,13 +17,14 @@ require('./css/app.less');
 heyuiConfig();
 Vue.use(VueRouter);
 Vue.use(HeyUI);
+Vue.use(mavonEditor)
 
-const router = routerConfig(); 
+const router = routerConfig();
 
 const app = new Vue({
-  router,
-  el: '#app',
-  render: h => h(App)
+    router,
+    el: '#app',
+    render: h => h(App)
 });
 
 export default app;
