@@ -4,10 +4,10 @@
             <div class="h-panel-bar" v-padding="10">
                 素材管理
             </div>
+            <div class="h-panel-bar" v-padding="10">
+                <button class="h-btn h-btn-yellow">添加</button>
+            </div>
             <div class="h-panel-body">
-                <div>
-                    <button class="h-btn h-btn-yellow">添加</button>
-                </div>
                 <Table :datas="datas">
                     <TableItem title="序号" prop="id" :tooltip="true"></TableItem>
                     <TableItem title="名称" prop="name"></TableItem>
@@ -32,7 +32,7 @@
                             </button>
                         </template>
                     </TableItem>
-                    <div slot="empty">自定义提醒：暂时无数据</div>
+                    <div slot="empty">自定义提醒：暂时无数据!</div>
                 </Table>
                 <div v-padding="10">
                     <Pagination :cur="page.current" :total="page.total" @change="currentChange" :small="true"></Pagination>
@@ -43,6 +43,7 @@
 </template>
 <script>
 import Clipboard from 'clipboard';
+
 
 export default {
   data() {
@@ -74,7 +75,7 @@ export default {
     preview(url){
         this.$Modal({
             title: "预览",
-            content: "<img src=""/>>"
+            content: "<img style='max-width:1000px;' src='"+url+"'/>"
         })
     }
   },

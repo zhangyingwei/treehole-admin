@@ -32,7 +32,32 @@
       <Col :width="24">
       <div class="h-panel">
         <div class="h-panel-bar">
-          <span class="h-panel-title">搭建顺序</span>
+          <span class="h-panel-title">日志检索</span>
+        </div>
+        <div class="h-panel-bar">
+            <Form mode="inline" :model="query">
+                <FormItem label="IP" prop="ip">
+                    <input type="text" v-model="query.ip" />
+                </FormItem>
+                <FormItem label="定位" prop="location">
+                    <input type="text" v-model="query.location" />
+                </FormItem>
+                <FormItem label="请求类型" prop="reqtype">
+                    <input type="text" v-model="query.reqtype" />
+                </FormItem>
+                <FormItem label="来源" prop="referer">
+                    <input type="text" v-model="query.referer" />
+                </FormItem>
+                <FormItem label="Agent" prop="agent">
+                    <input type="text" v-model="query.agent" />
+                </FormItem>
+                <FormItem label="时间" prop="datetime">
+                    <DateRangePicker v-model="query.datetime" placeholder="请选择日期"></DateRangePicker>
+                </FormItem>
+                <FormItem>
+                    <Button color="primary" @click="submitQurey">提交</Button>
+                </FormItem>
+            </Form>
         </div>
         <div class="h-panel-body demo-doc">
             <Table :datas="visit.datas" :columns="visit.columns">
@@ -53,23 +78,30 @@ import echarts from 'echarts'
 export default {
   data() {
     return {
-       visit: {
+        query: {
+            ip: "",
+            location: "",
+            reqtype: "",
+            referer: "",
+            agent: "",
+            datetime: null
+        },
+        visit: {
             current: 1,
             total: 200,
             columns: [
-                { title: '序号', prop: '$index', width: 100 },
                 { title: 'ID', prop: 'id', width: 100, tooltip: true, sort: true },
-                { title: '姓名', prop: 'name', tooltip: true, content: '测试', sort: true },
-                { title: '年龄', prop: 'age', sort: true },
-                { title: '地址', prop: 'address' },
+                { title: 'IP', prop: 'ip', width: 120},
+                { title: '定位', prop: 'ip_location', width: 120},
+                { title: '请求类型', prop: 'reqtype',width:80 },
+                { title: '来源', prop: 'referer',width: 250},
+                { title: '地址', prop: 'url',width: 250},
+                { title: 'Agent', prop: 'agent'},
+                { title: '时间', prop: 'datetime' ,width: 150 },
             ],
             datas: [
-                { id: 5, name: '测试5', age: 12, address: "上海" },
-                { id: 6, name: '测试6', age: 13, address: "上海" },
-                { id: 7, name: '测试7', age: 14, address: "上海" },
-                { id: 5, name: '测试5', age: 17, address: "上海" },
-                { id: 6, name: '测试6', age: 18, address: "上海" },
-                { id: 7, name: '测试7', age: 12, address: "上海" },
+                { id: 4, ip: '115.171.171.172',ip_location:"中国,北京,北京", reqtype: 'GET',referer: "http://blog.zhangyingwei.com/articles/3",url: "http://blog.zhangyingwei.com/articles|/articles", address: "上海",agent: "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",datetime: "2015-01-01 00:00:00" },
+                { id: 5, ip: '115.171.171.172',ip_location:"中国,北京,北京", reqtype: 'GET',referer: "http://blog.zhangyingwei.com/articles/3",url: "http://blog.zhangyingwei.com/articles|/articles", address: "上海",agent: "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",datetime: "2015-01-01 00:00:00" },
             ]
         }
     }
@@ -118,7 +150,7 @@ export default {
                         }
                     }
                 }
-            ]    
+            ]
         })
     },
     initBrowser(){
@@ -156,8 +188,14 @@ export default {
                         }
                     }
                 }
-            ]    
+            ]
         })
+    },
+    submitQurey(){
+        if(this.query){
+            this.$Notice(this.query.ip)
+            console.log(this.query)
+        }
     }
   },
   mounted: function(){

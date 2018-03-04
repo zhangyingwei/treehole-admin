@@ -38,7 +38,7 @@
           <span class="h-panel-title">安装信息</span>
         </div>
         <div class="h-panel-body">
-          <Form :readonly="true" labelWidth="100" labelPosition="left">
+          <Form :readonly="true" :labelWidth="100" labelPosition="left">
             <FormItem label="时间"> <i class="h-icon-calendar"></i> &nbsp;&nbsp;{{install.data.time}}</FormItem>
             <FormItem label="地址"><i class="h-icon-link"></i> &nbsp;&nbsp; {{install.data.ip}}</FormItem>
             <FormItem label="java"><i class="h-icon-star"></i> &nbsp;&nbsp;{{install.data.javaVersion}}</FormItem>
