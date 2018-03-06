@@ -8,6 +8,9 @@ import routerConfig from './js/config/router-config';
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 
+import axios from 'axios';
+Vue.prototype.$axios = axios;
+
 require('./css/app.less');
 
 //HeyUI已经设定为全局变量，无需引用

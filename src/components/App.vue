@@ -31,12 +31,14 @@ export default {
   store,
   mounted() {
     this.$Loading("加载中");
-    R.User.info().then((resp) => {
-      if (resp.ok) {
-        store.dispatch('updateAccount', resp.body);
-        this.initDict();
-      }
-    })
+    // R.User.info().then((resp) => {
+    //   if (resp.ok) {
+    //     store.dispatch('updateAccount', resp.body);
+    //     this.initDict();
+    //   }
+    // })
+    this.loading = false;
+    this.$Loading.close();
   },
   methods: {
     initDict() {

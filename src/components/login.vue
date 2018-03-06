@@ -27,11 +27,14 @@ export default {
   },
   methods: {
     submit() {
+      const self = this;
       this.loading = true;
       R.Login.login(Login.dispose(this.login)).then(resp=>{
+        console.log(resp)
         if(resp.ok){
-          let msg = resp.body;
-          Utils.saveLocal("token", msg.value);
+          let msg = resp.message;
+          // Utils.saveLocal("token", msg.value);
+          Utils.saveLocal("user",self.login.username)
           this.$router.replace('/');
         }
         this.loading = false;
