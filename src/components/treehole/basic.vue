@@ -39,12 +39,12 @@
         </div>
         <div class="h-panel-body">
           <Form :readonly="true" :labelWidth="100" labelPosition="left">
-            <FormItem label="时间"> <i class="h-icon-calendar"></i> &nbsp;&nbsp;{{install.data.time}}</FormItem>
-            <FormItem label="地址"><i class="h-icon-link"></i> &nbsp;&nbsp; {{install.data.ip}}</FormItem>
-            <FormItem label="java"><i class="h-icon-star"></i> &nbsp;&nbsp;{{install.data.javaVersion}}</FormItem>
-            <FormItem label="系统类型"><i class="h-icon-setting"></i> &nbsp;&nbsp;{{install.data.ostype}}</FormItem>
-            <FormItem label="系统型号"><i class="h-icon-setting"></i> &nbsp;&nbsp;{{install.data.osVersion}}</FormItem>
-            <FormItem label="CPU"><i class="h-icon-setting"></i> &nbsp;&nbsp;{{install.data.cpu}}</FormItem>
+            <FormItem label="时间"> <i class="h-icon-calendar"></i> &nbsp;&nbsp;{{install.data.idata}}</FormItem>
+            <FormItem label="地址"><i class="h-icon-link"></i> &nbsp;&nbsp; {{install.data.ilocal}}</FormItem>
+            <FormItem label="java"><i class="h-icon-star"></i> &nbsp;&nbsp;{{install.data.ijdkversion}}</FormItem>
+            <FormItem label="系统类型"><i class="h-icon-setting"></i> &nbsp;&nbsp;{{install.data.iosdesktop}}</FormItem>
+            <FormItem label="系统型号"><i class="h-icon-setting"></i> &nbsp;&nbsp;{{install.data.iosname}}</FormItem>
+            <FormItem label="CPU"><i class="h-icon-setting"></i> &nbsp;&nbsp;{{install.data.ioscpu}}</FormItem>
           </Form>
         </div>
       </div>
@@ -82,12 +82,12 @@ export default {
       },
       install: {
         data: {
-          time: "2017-06-14 11:00:09",
-          ip: "172.0.0.1",
-          javaVersion: "jdk_18",
-          ostype: "Linux",
-          osVersion: "10.0.1.2.123",
-          cpu: "intel"
+          idata: "2017-06-14 11:00:09",
+          ilocal: "172.0.0.1",
+          ijdkversion: "jdk_18",
+          iosname: "Linux",
+          ioscpu: "10.0.1.2.123",
+          iosdesktop: "intel"
         }
       }
     }
@@ -108,7 +108,32 @@ export default {
           self.basic.btn.text="编辑"
         },2000)
       }
+      this.query_basic()
+    },
+    query_basic(){
+      R.Blog.basic().then(resp=>{
+        console.log(resp)
+        if(resp.ok){
+          this.basic.data = resp.result.data
+        }else{
+          this.$Message("加载基础信息错误")
+        }
+      });
+    },
+    query_install(){
+      R.Blog.install().then(resp=>{
+        console.log(resp)
+        if(resp.ok){
+          this.install.data = resp.result.data
+        }else{
+          this.$Message("加载基础信息错误")
+        }
+      });
     }
+  },
+  mounted: function(){
+      this.query_basic()
+      this.query_install()
   }
 }
 </script>

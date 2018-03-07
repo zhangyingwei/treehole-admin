@@ -15,6 +15,17 @@ const Request = {
             return Ajax.post("/logout", param);
         }
     },
+    Blog: {
+        basic(){
+            return Ajax.get("/blog/basic")
+        },
+        install(){
+            return Ajax.get("/blog/install")
+        },
+        log(param){
+            return Ajax.get("/logs",param)
+        }
+    },
     Demo: {
         agentList() {
             return Ajax.get('/agent/list');

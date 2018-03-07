@@ -64,7 +64,7 @@
                 <div slot="empty">自定义提醒：暂时无数据</div>
             </Table>
             <div v-padding="20">
-                <Pagination :cur="visit.current" :total="visit.total" @change="currentChange" :small="true"></Pagination>
+                <Pagination :cur="visit.current" :size="visit.size" :total="visit.total" @change="currentChange" :small="true"></Pagination>
             </div>
         </div>
       </div>
@@ -88,28 +88,28 @@ export default {
         },
         visit: {
             current: 1,
-            total: 200,
+            total: 0,
+            size: 10,
             columns: [
                 { title: 'ID', prop: 'id', width: 100, tooltip: true, sort: true },
                 { title: 'IP', prop: 'ip', width: 120},
                 { title: '定位', prop: 'ip_location', width: 120},
                 { title: '请求类型', prop: 'reqtype',width:80 },
                 { title: '来源', prop: 'referer',width: 250},
-                { title: '地址', prop: 'url',width: 250},
+                { title: '地址', prop: 'uri',width: 250},
                 { title: 'Agent', prop: 'agent'},
                 { title: '时间', prop: 'datetime' ,width: 150 },
             ],
             datas: [
-                { id: 4, ip: '115.171.171.172',ip_location:"中国,北京,北京", reqtype: 'GET',referer: "http://blog.zhangyingwei.com/articles/3",url: "http://blog.zhangyingwei.com/articles|/articles", address: "上海",agent: "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",datetime: "2015-01-01 00:00:00" },
-                { id: 5, ip: '115.171.171.172',ip_location:"中国,北京,北京", reqtype: 'GET',referer: "http://blog.zhangyingwei.com/articles/3",url: "http://blog.zhangyingwei.com/articles|/articles", address: "上海",agent: "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",datetime: "2015-01-01 00:00:00" },
+                { id: 4, ip: '115.171.171.172',ip_location:"中国,北京,北京", reqtype: 'GET',referer: "http://blog.zhangyingwei.com/articles/3",uri: "http://blog.zhangyingwei.com/articles|/articles", address: "上海",agent: "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",datetime: "2015-01-01 00:00:00" },
+                { id: 5, ip: '115.171.171.172',ip_location:"中国,北京,北京", reqtype: 'GET',referer: "http://blog.zhangyingwei.com/articles/3",uri: "http://blog.zhangyingwei.com/articles|/articles", address: "上海",agent: "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",datetime: "2015-01-01 00:00:00" },
             ]
         }
     }
   },
   methods: {
     currentChange(value) {
-      this.total = this.total + 1;
-      console.log(value.cur, value.size);
+      this.queryLog()
     },
     initCharts(){
         this.initVisit()
@@ -196,10 +196,25 @@ export default {
             this.$Notice(this.query.ip)
             console.log(this.query)
         }
+    },
+    queryLog(){
+        R.Blog.log({
+            current: this.visit.current,
+            pageSize: this.visit.size
+        }).then(resp=>{
+        console.log(resp)
+        if(resp.ok){
+          this.visit.datas = resp.result.data.logs
+          this.visit.total = resp.result.data.page.total
+        }else{
+          this.$Message("加载基础信息错误")
+        }
+      });
     }
   },
   mounted: function(){
       this.initCharts()
+      this.queryLog()
   }
 }
 </script>

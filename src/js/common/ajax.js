@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 let ajax = {
-    PREFIX: "http://localhost:5000/admin",
+    PREFIX: "http://localhost:5000/api/admin",
     HEADER: Utils.getAuthor() || "heyui",
     requestingApi: new Set(),
     changeHeader(header) {
