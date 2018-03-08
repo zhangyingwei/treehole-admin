@@ -108,10 +108,9 @@ let ajax = {
                 that.deleteRequest(params.url);
                 let data = response.data;
                 let status = response.status;
-                console.log(response)
-                    // if (status == 200) {
-                    //     status = data.code;
-                    // }
+                // if (status == 200) {
+                //     status = data.code;
+                // }
                 if (status != 200) {
                     if (status == 401) {
                         window.top.location = "/login";

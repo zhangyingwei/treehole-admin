@@ -16,14 +16,17 @@ const Request = {
         }
     },
     Blog: {
-        basic(){
+        basic() {
             return Ajax.get("/blog/basic")
         },
-        install(){
+        install() {
             return Ajax.get("/blog/install")
         },
-        log(param){
-            return Ajax.get("/logs",param)
+        log(param) {
+            return Ajax.get("/logs", param)
+        },
+        settings() {
+            return Ajax.get("/settings/userinfo")
         }
     },
     Demo: {

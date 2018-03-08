@@ -33,7 +33,7 @@ export default {
         console.log(resp)
         if(resp.ok){
           let msg = resp.message;
-          // Utils.saveLocal("token", msg.value);
+          Utils.saveLocal("token", msg.value);
           Utils.saveLocal("user",self.login.username)
           this.$router.replace('/');
         }

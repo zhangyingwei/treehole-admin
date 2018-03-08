@@ -48,6 +48,9 @@
                 <FormItem label="来源" prop="referer">
                     <input type="text" v-model="query.referer" />
                 </FormItem>
+                <FormItem label="地址" prop="referer">
+                    <input type="text" v-model="query.uri" />
+                </FormItem>
                 <FormItem label="Agent" prop="agent">
                     <input type="text" v-model="query.agent" />
                 </FormItem>
@@ -60,6 +63,7 @@
             </Form>
         </div>
         <div class="h-panel-body demo-doc">
+            <Loading text="加载中..." :loading="visit.loading"></Loading>
             <Table :datas="visit.datas" :columns="visit.columns">
                 <div slot="empty">自定义提醒：暂时无数据</div>
             </Table>
@@ -83,10 +87,12 @@ export default {
             location: "",
             reqtype: "",
             referer: "",
+            uri: "",
             agent: "",
-            datetime: null
+            datetime: {}
         },
         visit: {
+            loading: false,
             current: 1,
             total: 0,
             size: 10,
@@ -109,7 +115,9 @@ export default {
   },
   methods: {
     currentChange(value) {
-      this.queryLog()
+        this.visit.current = value.cur
+        this.visit.size = value.size
+        this.queryLog()
     },
     initCharts(){
         this.initVisit()
@@ -193,22 +201,34 @@ export default {
     },
     submitQurey(){
         if(this.query){
-            this.$Notice(this.query.ip)
-            console.log(this.query)
+            this.queryLog()
         }
     },
     queryLog(){
+        this.visit.loading = true;
         R.Blog.log({
             current: this.visit.current,
-            pageSize: this.visit.size
+            pageSize: this.visit.size,
+            ip:this.query.ip,
+            ip_location:this.query.ip_location,
+            reqtype: this.query.reqtype,
+            referer: this.query.referer,
+            uri: this.query.uri,
+            agent: this.query.agent,
+            start:this.query.datetime.start,
+            end: this.query.datetime.end
         }).then(resp=>{
-        console.log(resp)
-        if(resp.ok){
-          this.visit.datas = resp.result.data.logs
-          this.visit.total = resp.result.data.page.total
-        }else{
-          this.$Message("加载基础信息错误")
-        }
+            console.log(resp)
+            if(resp.ok){
+                this.visit.datas = resp.result.data.logs.map(log => {
+                    log.datetime = new Date(log.timestamp).toLocaleString()
+                    return log
+                })
+                this.visit.total = resp.result.data.page.total
+            }else{
+                this.$Message("加载基础信息错误")
+            }
+            this.visit.loading = false;
       });
     }
   },
