@@ -27,6 +27,17 @@ const Request = {
         },
         settings() {
             return Ajax.get("/settings/userinfo")
+        },
+        updateUserInfo(param) {
+            return Ajax.post("/settings/userinfo",param)
+        }
+    },
+    Article: {
+        save(param){
+            return Ajax.post("/articles/save",param)
+        },
+        publish(param){
+            return Ajax.post("/articles",param)
         }
     },
     Demo: {

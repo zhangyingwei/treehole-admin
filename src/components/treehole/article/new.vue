@@ -60,7 +60,8 @@ export default {
             tags: "",
             kind: "",
             url: "",
-            allowCommont: true
+            allowCommont: true,
+            id: ""
         },
         toolbars: {
             bold: true,
@@ -94,7 +95,28 @@ export default {
   methods: {
     onSave(){
         this.validInfo()
-        console.log(this.value)
+        R.Article.save({
+            id: this.info.id,
+            title: this.info.title,
+            subpath: this.info.url,
+            tags: this.info.tags===""?"":this.info.tags.join(","),
+            categories: this.info.kind,
+            content: this.value,
+            usecommont: this.info.allowCommont?"on":"off"
+        }).then(resp => {
+            console.log(resp)
+            if(resp.ok){
+                if (resp.code == 400) {
+                    this.$Message(resp.message)
+                }else{
+                    this.info.id = resp.result.data
+                    this.$Message("保存成功")
+                }
+                
+            }else{
+                this.$Message("服务端错误")
+            }
+        })
     },
     validInfo(){
         if(!this.info.title){
@@ -105,6 +127,7 @@ export default {
         }
     },
     submite(){
+        this.validInfo()
         this.$Message(this.value)
     }
   },

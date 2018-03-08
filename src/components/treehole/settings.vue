@@ -9,7 +9,7 @@
 <template>
   <div class="app-home" v-padding="20">
     <Row :space="20">
-      <Col :width="12">
+      <Col :width="6">
         <div class="h-panel" v-padding="10">
           <div class="h-panel-bar">
             <span class="h-panel-title">用户信息</span>
@@ -17,10 +17,10 @@
           <div class="h-panel-body">
             <Form labelPosition="left">
               <FormItem label="昵称">
-                <input :readonly="basic.readonly" type="text" v-model="basic.data.name"/>
+                <input :readonly="basic.readonly" type="text" v-model="basic.data.nickname"/>
               </FormItem>
               <FormItem label="邮箱">
-                <input :readonly="basic.readonly" type="text" v-model="basic.data.url"/>
+                <input :readonly="basic.readonly" type="text" v-model="basic.data.email"/>
               </FormItem>
               <FormItem label="微博">
                 <input :readonly="basic.readonly" type="text" v-model="basic.data.weibo"/>
@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       basic: {
+        loading: false,
         edit: false,
         btn: {
           text: "编辑",
@@ -60,8 +61,8 @@ export default {
         },
         readonly: true,
         data: {
-          name: "二狗子",
-          url:"ergouzi@163.com",
+          nickname: "二狗子",
+          email:"ergouzi@163.com",
           weibo: "ergouzi",
           weixin: "ergouzi",
           zhihu: "zhihu-ergouzi",
@@ -82,13 +83,34 @@ export default {
       }else{
         this.basic.readonly=true
         this.basic.btn.isLoading=true
-        setTimeout(function(){
-          self.basic.btn.isLoading = false
-          self.$Notice['success'](`修改信息成功`);
-          self.basic.btn.text="编辑"
-        },2000)
+        this.updateUserInfo()
       }
+    },
+    updateUserInfo(){
+      this.basic.loading = true;
+      R.Blog.updateUserInfo(this.basic.data).then(resp => {
+        if(resp.ok){
+          this.$Message("修改信息成功")
+        }else{
+          this.$Message("修改信息失败")
+        }
+        this.basic.btn.isLoading=false
+      })
+    },
+    queryUserInfo(){
+      R.Blog.settings().then(resp=>{
+            if(resp.ok){
+                this.basic.data = resp.result.data
+                this.$Message("加载数据成功")
+            }else{
+              this.$Message(resp.message)  
+            }
+            
+      });
     }
+  },
+  mounted: function(){
+      this.queryUserInfo()
   }
 }
 </script>
