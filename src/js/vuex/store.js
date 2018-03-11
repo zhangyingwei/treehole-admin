@@ -6,7 +6,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     User: {},
-    showMenu: true
+    showMenu: true,
+    article: null,
   },
   mutations: {
     updateAccount(state, data){
@@ -14,6 +15,9 @@ export default new Vuex.Store({
     },
     updateMenu(state, isShow){
       state.showMenu = isShow;
+    },
+    updateArticle(state,data){
+      state.article = data
     }
   },
   actions: {
@@ -22,6 +26,9 @@ export default new Vuex.Store({
     },
     updateMenu(context, data){
       context.commit('updateMenu', data)
+    },
+    updateArticle(context,data){
+      context.commit("updateArticle",data)
     }
   },
   getters: {
@@ -30,6 +37,9 @@ export default new Vuex.Store({
     },
     showMenu: state => {
       return state.showMenu
+    },
+    article: state => {
+      return state.article
     }
   }
 })

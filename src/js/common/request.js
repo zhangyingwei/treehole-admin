@@ -38,6 +38,30 @@ const Request = {
         },
         publish(param){
             return Ajax.post("/articles",param)
+        },
+        kinds(){
+            return Ajax.get("/articles/kinds")
+        },
+        historys(param){
+            return Ajax.get("/articles",param)
+        },
+        publishOne(id){
+            return Ajax.post("/articles/"+id)
+        },
+        deleteOne(id){
+            return Ajax.delete("/articles/"+id)
+        },
+        listKindsWithPage(param){
+            return Ajax.get("/kinds",param)
+        },
+        addOneKind(param){
+            return Ajax.post("/kinds",param)
+        },
+        updateOneKind(param){
+            return Ajax.post("/kinds/update",param)
+        },
+        deleteOneKind(param){
+            return Ajax.delete("/kinds/"+param)
         }
     },
     Demo: {
