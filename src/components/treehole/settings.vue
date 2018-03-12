@@ -61,14 +61,14 @@ export default {
         },
         readonly: true,
         data: {
-          nickname: "二狗子",
-          email:"ergouzi@163.com",
-          weibo: "ergouzi",
-          weixin: "ergouzi",
-          zhihu: "zhihu-ergouzi",
-          facebook: "zhangyw",
-          twitter: "twitter",
-          desc: "记录我的学习生活，这句话长点会好看，所以后边的话完全是为了凑字数而存在。"
+          nickname: "",
+          email:"",
+          weibo: "",
+          weixin: "",
+          zhihu: "",
+          facebook: "",
+          twitter: "",
+          desc: ""
         }
       }
     }

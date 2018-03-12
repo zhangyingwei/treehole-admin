@@ -5,7 +5,8 @@
                 素材管理
             </div>
             <div class="h-panel-bar" v-padding="10">
-                <button class="h-btn h-btn-yellow">添加</button>
+               <Reso :options="options" type="files" :limit="2" data-type="file" v-model="file"></Reso>
+                <!-- <button class="h-btn h-btn-yellow">添加</button> -->
             </div>
             <div class="h-panel-body">
                 <Table :datas="datas">
@@ -43,7 +44,7 @@
 </template>
 <script>
 import Clipboard from 'clipboard';
-
+import reso from './reso';
 
 export default {
   data() {
@@ -55,8 +56,15 @@ export default {
         page: {
             current: 1,
             total: 200
-        }
+        },
+        options: {
+            max_file_size: '1mb'
+        },
+        file: []
     }
+  },
+  components: {
+    Reso: reso
   },
   methods: {
     search(data){
@@ -77,6 +85,12 @@ export default {
             title: "预览",
             content: "<img style='max-width:1000px;' src='"+url+"'/>"
         })
+    },
+    fileclick(file) {
+      this.$Modal({
+        title: '预览或者下载',
+        content: `自定义处理文件预览或者下载`
+      })
     }
   },
   mounted: function(){
