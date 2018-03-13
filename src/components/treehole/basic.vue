@@ -75,19 +75,19 @@ export default {
         },
         readonly: true,
         data: {
-          name: "张英伟的博客",
-          url:"http://blog.zhangyingwei.com",
-          desc: "记录我的学习生活，这句话长点会好看，所以后边的话完全是为了凑字数而存在。"
+          name: "",
+          url:"",
+          desc: ""
         }
       },
       install: {
         data: {
-          idata: "2017-06-14 11:00:09",
-          ilocal: "172.0.0.1",
-          ijdkversion: "jdk_18",
-          iosname: "Linux",
-          ioscpu: "10.0.1.2.123",
-          iosdesktop: "intel"
+          idata: "",
+          ilocal: "",
+          ijdkversion: "",
+          iosname: "",
+          ioscpu: "",
+          iosdesktop: ""
         }
       }
     }

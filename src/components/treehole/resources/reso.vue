@@ -17,7 +17,7 @@ export default {
     },
     type: {
       type: String,
-      default: 'image'
+      default: 'imimage/jpg,image/jpeg,image/pngage'
     },
     dataType: String,
     dragdrop: {

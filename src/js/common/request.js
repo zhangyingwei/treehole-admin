@@ -29,39 +29,50 @@ const Request = {
             return Ajax.get("/settings/userinfo")
         },
         updateUserInfo(param) {
-            return Ajax.post("/settings/userinfo",param)
+            return Ajax.post("/settings/userinfo", param)
         }
     },
     Article: {
-        save(param){
-            return Ajax.post("/articles/save",param)
+        save(param) {
+            return Ajax.post("/articles/save", param)
         },
-        publish(param){
-            return Ajax.post("/articles",param)
+        publish(param) {
+            return Ajax.post("/articles", param)
         },
-        kinds(){
+        kinds() {
             return Ajax.get("/articles/kinds")
         },
-        historys(param){
-            return Ajax.get("/articles",param)
+        historys(param) {
+            return Ajax.get("/articles", param)
         },
-        publishOne(id){
-            return Ajax.post("/articles/"+id)
+        publishOne(id) {
+            return Ajax.post("/articles/" + id)
         },
-        deleteOne(id){
-            return Ajax.delete("/articles/"+id)
+        deleteOne(id) {
+            return Ajax.delete("/articles/" + id)
         },
-        listKindsWithPage(param){
-            return Ajax.get("/kinds",param)
+        listKindsWithPage(param) {
+            return Ajax.get("/kinds", param)
         },
-        addOneKind(param){
-            return Ajax.post("/kinds",param)
+        addOneKind(param) {
+            return Ajax.post("/kinds", param)
         },
-        updateOneKind(param){
-            return Ajax.post("/kinds/update",param)
+        updateOneKind(param) {
+            return Ajax.post("/kinds/update", param)
         },
-        deleteOneKind(param){
-            return Ajax.delete("/kinds/"+param)
+        deleteOneKind(param) {
+            return Ajax.delete("/kinds/" + param)
+        }
+    },
+    Resources: {
+        search(param) {
+            return Ajax.get("/resources", param)
+        },
+        deleteOne(param) {
+            return Ajax.delete("/resources/" + param)
+        },
+        upload() {
+            return
         }
     },
     Demo: {

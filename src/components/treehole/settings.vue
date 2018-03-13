@@ -101,7 +101,7 @@ export default {
       R.Blog.settings().then(resp=>{
             if(resp.ok){
                 this.basic.data = resp.result.data
-                this.$Message("加载数据成功")
+                // this.$Message("加载数据成功")
             }else{
               this.$Message(resp.message)  
             }
