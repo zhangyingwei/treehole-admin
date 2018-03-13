@@ -1,23 +1,3 @@
-<style>
-.fileinput-button {
-    position: relative;
-    display: inline-block;
-    overflow: hidden;
-}
-
-.fileinput-button input{
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    opacity: 0;
-    -ms-filter: 'alpha(opacity=0)';
-    font-size: 200px;
-}
-.fileinput-button input:hover{
-    cursor: pointer;
-}
-</style>
-
 <template>
     <div class="app-home" v-padding="20">
         <div class="h-panel">
@@ -27,10 +7,29 @@
             <div class="h-panel-bar" v-padding="10">
                <!-- <Reso :options="options" type="files" :limit="2" data-type="file" v-model="file"></Reso> -->
                 <!-- <button class="h-btn h-btn-yellow">添加</button> -->
-                <span class="fileinput-button">
-                    <span class="h-btn h-btn-yellow" @click="submitForm($event)">上传</span>
-                    <input type="file" @change="getFile($event)" accept="image/png, image/jpeg, image/gif, image/jpg, application/pdf">
-                </span>
+                <div class="h-btn-group h-btn-group-l">
+                    <file-upload
+                          class="h-btn h-btn-primary"
+                          post-action="/upload/post"
+                          extensions="gif,jpg,jpeg,png,webp"
+                          accept="image/png,image/gif,image/jpeg,image/webp"
+                          :multiple="true"
+                          :size="1024 * 1024 * 10"
+                          v-model="files"
+                          @input-filter="inputFilter"
+                          @input-file="inputFile"
+                          ref="upload">
+                          选择文件
+                    </file-upload>
+                    <button class="h-btn h-btn-green" style="overflow" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
+                      <i class="h-icon-outbox"></i>
+                      开始上传
+                    </button>
+                    <button type="button" class="h-btn h-btn-red"  v-else @click.prevent="$refs.upload.active = false">
+                      <i class="fa fa-stop" aria-hidden="true"></i>
+                      Stop Upload
+                    </button>
+                </div>
             </div>
             <div class="h-panel-bar" v-padding="10">
                <Form mode="inline">
@@ -90,7 +89,7 @@
 </template>
 <script>
 import Clipboard from 'clipboard';
-import reso from './reso';
+import FileUpload from 'vue-upload-component'
 
 export default {
   data() {
@@ -99,7 +98,7 @@ export default {
             name: null,
             type: null
         },
-        file: "",
+        files: [],
         datas: [
             { id: 5, name: '测试5',type: "jpeg",url: "http://blog.zhangyingwei.com/files/6f066e81-4cca-4200-9bf7-f1a24099c57b"},
             { id: 6, name: '测试6',type: "png",url: "http://blog.zhangyingwei.com"},
@@ -117,7 +116,7 @@ export default {
     }
   },
   components: {
-    Reso: reso
+    FileUpload,
   },
   methods: {
     search(){
@@ -130,7 +129,6 @@ export default {
         }).then(resp => {
             if (resp.ok) {
                 if(resp.code == 200){
-                    console.log(resp)
                     this.datas = resp.result.data.resources.map(line => {
                         line.url = "http://localhost:5000/files/"+line.alias
                         // line.url = "http://"+window.location.host+"/files/"+line.alias
@@ -159,25 +157,6 @@ export default {
             this.search()
         })
     },
-    getFile(event) {
-        this.file = event.target.files[0];
-        console.log(this.file);
-    },
-    submitForm(event) {
-        event.preventDefault();
-        let formData = new FormData();
-        formData.append('file', this.file);
-        let config = {
-            headers: {
-            'Content-Type': 'multipart/form-data'
-            }
-        }
-        this.$http.post('/upload', formData, config).then(function (res) {
-            if (res.status === 2000) {
-            /*这里做处理*/
-            }
-        })
-    },
     currentChange(value){
         this.page.current = value.cur
         this.page.size = value.size
@@ -201,11 +180,35 @@ export default {
             content: content
         })
     },
-    fileclick(file) {
-      this.$Modal({
-        title: '预览或者下载',
-        content: `自定义处理文件预览或者下载`
-      })
+    inputFilter(newFile, oldFile, prevent) {
+      if (newFile && !oldFile) {
+        // Before adding a file
+        // 添加文件前
+        // Filter system files or hide files
+        // 过滤系统文件 和隐藏文件
+        if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
+          return prevent()
+        }
+        // Filter php html js file
+        // 过滤 php html js 文件
+        if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
+          return prevent()
+        }
+      }
+    },
+    inputFile(newFile, oldFile) {
+      if (newFile && !oldFile) {
+        // add
+        console.log('add', newFile)
+      }
+      if (newFile && oldFile) {
+        // update
+        console.log('update', newFile)
+      }
+      if (!newFile && oldFile) {
+        // remove
+        console.log('remove', oldFile)
+      }
     }
   },
   mounted: function(){
