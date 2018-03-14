@@ -10,26 +10,43 @@
                 <div class="h-btn-group h-btn-group-l">
                     <file-upload
                           class="h-btn h-btn-primary"
-                          post-action="/upload/post"
-                          extensions="gif,jpg,jpeg,png,webp"
-                          accept="image/png,image/gif,image/jpeg,image/webp"
+                          post-action="http://localhost:5000/admin/files/upload"
+                          extensions="gif,jpg,jpeg,png,webp,pdf"
+                          accept="image/png,image/gif,image/jpeg,image/webp,application/pdf"
                           :multiple="true"
-                          :size="1024 * 1024 * 10"
+                          :size="1024 * 1024 * 100"
                           v-model="files"
                           @input-filter="inputFilter"
                           @input-file="inputFile"
                           ref="upload">
                           选择文件
                     </file-upload>
-                    <button class="h-btn h-btn-green" style="overflow" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
+                    <button class="h-btn h-btn-green" style="overflow" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="startUpload">
                       <i class="h-icon-outbox"></i>
                       开始上传
                     </button>
                     <button type="button" class="h-btn h-btn-red"  v-else @click.prevent="$refs.upload.active = false">
                       <i class="fa fa-stop" aria-hidden="true"></i>
-                      Stop Upload
+                      暂停
                     </button>
                 </div>
+            </div>
+            <div v-if="files.length > 0" class="h-panel-bar" v-padding="10">
+                <ul>
+                    <li v-for="file in files">
+                        <Row :space-x="19" :space-y="5" v-if="!file.success">
+                            <Col width="18" >
+                                 <span class="gray-color">{{file.name}}</span>
+                            </Col>
+                            <Col width="6" >
+                                <button class="h-btn h-btn-red h-btn-s" @click.prevent="removeFile(file)">
+                                    移除
+                                    <i class="h-icon-close"></i>
+                                </button>
+                            </Col>
+                        </Row>
+                    </li>
+                </ul>
             </div>
             <div class="h-panel-bar" v-padding="10">
                <Form mode="inline">
@@ -99,10 +116,7 @@ export default {
             type: null
         },
         files: [],
-        datas: [
-            { id: 5, name: '测试5',type: "jpeg",url: "http://blog.zhangyingwei.com/files/6f066e81-4cca-4200-9bf7-f1a24099c57b"},
-            { id: 6, name: '测试6',type: "png",url: "http://blog.zhangyingwei.com"},
-        ],
+        datas: [],
         loading: false,
         page: {
             current: 1,
@@ -112,7 +126,8 @@ export default {
         options: {
             max_file_size: '1mb'
         },
-        file: []
+        file: [],
+        // isUploaded: $refs.upload ? $refs.upload.uploaded : true
     }
   },
   components: {
@@ -187,12 +202,14 @@ export default {
         // Filter system files or hide files
         // 过滤系统文件 和隐藏文件
         if (/(\/|^)(Thumbs\.db|desktop\.ini|\..+)$/.test(newFile.name)) {
-          return prevent()
+            this.$Message(newFile.name+" - 文件类型不正确!")
+            return prevent()
         }
         // Filter php html js file
         // 过滤 php html js 文件
         if (/\.(php5?|html?|jsx?)$/i.test(newFile.name)) {
-          return prevent()
+            this.$Message(newFile.name+" - 文件类型不正确!")
+            return prevent()
         }
       }
     },
@@ -204,11 +221,25 @@ export default {
       if (newFile && oldFile) {
         // update
         console.log('update', newFile)
+        if(this.$refs.upload && this.$refs.upload.uploaded){
+            this.$Message("上传完毕")
+            this.search()
+        }
       }
       if (!newFile && oldFile) {
         // remove
         console.log('remove', oldFile)
       }
+    },
+    removeFile(file){
+        this.$refs.upload.remove(file)
+    },
+    startUpload(){
+        if(this.files.length > 0){
+            this.$refs.upload.active = true
+        }else{
+            this.$Message("请先选择文件")
+        }
     }
   },
   mounted: function(){

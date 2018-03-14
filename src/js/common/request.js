@@ -6,7 +6,17 @@ const Request = {
             return Ajax.get(`/dicts`);
         },
     },
-    Home: {},
+    Home: {
+        articleCount() {
+            return Ajax.get("/articles/count")
+        },
+        resourcesCount() {
+            return Ajax.get("/resources/count")
+        },
+        visitCount() {
+            return Ajax.get("/visits/count")
+        }
+    },
     Login: {
         login(param) {
             return Ajax.post("/login", param);
