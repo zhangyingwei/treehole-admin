@@ -59,6 +59,15 @@ const initRouter = () => {
         // } else {
         // document.title = '管理系统';
         // }
+        console.log(to.path)
+        var user = null
+        if (!user) {
+            if (to.path==="/login") {
+                next()
+            }else{
+                next('/login')
+            }
+        }
         next();
     })
     router.afterEach(() => {
