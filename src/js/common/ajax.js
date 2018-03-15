@@ -87,7 +87,7 @@ let ajax = {
         }
         let header = {
             "author": this.HEADER,
-            Authorization: Utils.getLocal("token"),
+            "treehole-tocken": Utils.getLocal("token")
         };
         let defaultParam = {
             headers: header,
@@ -105,16 +105,18 @@ let ajax = {
         let that = this;
         params = Utils.extend({}, defaultParam, params);
         return new Promise((resolve) => {
+            axios.defaults.withCredentials = true
             return axios.request(params).then((response) => {
                 that.deleteRequest(params.url);
                 let data = response.data;
                 let status = response.status;
-                // if (status == 200) {
-                //     status = data.code;
-                // }
+                console.log("data", data)
+                    // if (status == 200) {
+                    //     status = data.code;
+                    // }
                 if (status != 200) {
                     if (status == 401) {
-                        window.top.location = "/login";
+                        window.top.location = "/admin/login";
                         return;
                     }
                     if (status == 500) {
@@ -124,6 +126,11 @@ let ajax = {
                     } else if (status != 200) {
                         HeyUI.$Message.error(data._msg || '请求异常');
                     }
+                }
+                console.log(data)
+                if (data.code == 999) {
+                    HeyUI.$Message.error('请先登录');
+                    HeyUI.$router.replace('/vue/admin/login');
                 }
                 // data.ok = data.status == 200;
                 data.ok = status

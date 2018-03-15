@@ -4,47 +4,47 @@ const initRouter = () => {
     const routerParam = {
         mode: 'history',
         routes: [{
-            path: '/',
+            path: '/vue/admin',
             name: 'home',
             component: (resolve) => require(['components/welcome/home'], resolve)
         }, {
-            path: '/login',
+            path: '/vue/admin/login',
             name: 'login',
             component: (resolve) => require(['components/login'], resolve)
         }, {
-            path: '/form',
+            path: '/vue/admin/form',
             name: 'form',
             component: (resolve) => require(['components/demo-modules/form'], resolve)
         }, {
-            path: '/basic',
+            path: '/vue/admin/basic',
             name: 'basic',
             component: (resolve) => require(['components/treehole/basic'], resolve)
         }, {
-            path: '/statistic',
+            path: '/vue/admin/statistic',
             name: 'statistic',
             component: (resolve) => require(['components/treehole/statistic'], resolve)
         }, {
-            path: '/settings',
+            path: '/vue/admin/settings',
             name: 'settings',
             component: (resolve) => require(['components/treehole/settings'], resolve)
         }, {
-            path: '/article/new',
+            path: '/vue/admin/article/new',
             name: 'new',
             component: (resolve) => require(['components/treehole/article/new'], resolve)
         }, {
-            path: '/article/history',
+            path: '/vue/admin/article/history',
             name: 'history',
             component: (resolve) => require(['components/treehole/article/history'], resolve)
         }, {
-            path: '/article/commont',
+            path: '/vue/admin/article/commont',
             name: 'commont',
             component: (resolve) => require(['components/treehole/article/commont'], resolve)
         }, {
-            path: '/article/kinds',
+            path: '/vue/admin/article/kinds',
             name: 'kinds',
             component: (resolve) => require(['components/treehole/article/kinds'], resolve)
         }, {
-            path: '/resources',
+            path: '/vue/admin/resources',
             name: 'resources',
             component: (resolve) => require(['components/treehole/resources/resources'], resolve)
         }]
@@ -60,12 +60,12 @@ const initRouter = () => {
         // document.title = '管理系统';
         // }
         console.log(to.path)
-        var user = null
+        var user = {}
         if (!user) {
-            if (to.path==="/login") {
+            if (to.path === "/vue/admin/login") {
                 next()
-            }else{
-                next('/login')
+            } else {
+                next('/vue/admin/login')
             }
         }
         next();

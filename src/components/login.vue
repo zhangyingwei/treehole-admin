@@ -21,7 +21,10 @@ import Login from 'model/login/Login';
 export default {
   data() {
     return {
-      login: Login.parse({}),
+      login: {
+        username: null,
+        password: null
+      },
       loading: false
     }
   },
@@ -29,13 +32,21 @@ export default {
     submit() {
       const self = this;
       this.loading = true;
-      R.Login.login(Login.dispose(this.login)).then(resp=>{
+      R.Login.login(this.login).then(resp=>{
         console.log(resp)
         if(resp.ok){
-          let msg = resp.message;
-          Utils.saveLocal("token", msg.value);
-          Utils.saveLocal("user",self.login.username)
-          this.$router.replace('/');
+          if(resp.code === 200){
+            this.$Message(resp.message)
+            console.log(resp.result.data)
+            Utils.removeLocal("token")
+            Utils.saveLocal("token", resp.result.data);
+            Utils.saveLocal("user",self.login.username)
+            this.$router.replace('/vue/admin');
+          }else{
+            this.$Message(resp.message)
+          }
+        }else{
+          this.$Message("系统错误")
         }
         this.loading = false;
       });
