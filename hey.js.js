@@ -43,7 +43,7 @@ module.exports = {
         devServer: {
             "proxy": {
                 "/api": {
-                    "target": "http://umock.ch-un.com"
+                    "target": "http://localhost:5000"
                 }
             },
             historyApiFallback: true

@@ -29,7 +29,17 @@
                             </Tooltip>
                         </template>
                     </TableItem>
-                    <TableItem title="标题" prop="title" :width="100" ></TableItem>
+                    <TableItem title="标题" :width="150" >
+                        <template slot-scope="props">
+                            <Tooltip  placement="right">
+                                <span class="text-hover">{{props.data.title}}</span>
+                                <div slot="content">
+                                    <button @click="preview(props.data.id)" class="h-btn h-btn-no-border h-btn-text-yellow">点我预览</button>
+                                </div>
+                            </Tooltip>
+                            <!-- <a target="_blank" :src="'/articles/preview'+props.data.id+'?token='+token" >预览</a> -->
+                        </template>
+                    </TableItem>
                     <TableItem title="简介">
                         <template slot-scope="props">
                             <Tooltip theme="white" placement="right">
@@ -102,6 +112,7 @@ import store from 'js/vuex/store';
 export default {
   data() {
     return {
+        token: "",
         toolbar: {
             title: null,
             flag: 4
@@ -183,7 +194,7 @@ export default {
     },
     etidOne(line){
         store.dispatch('updateArticle', line);
-        this.$router.replace('/article/new');
+        this.$router.replace('/vue/admin/article/new');
     },
     remove(line){
         this.confirm.itemid = line.id
@@ -204,9 +215,14 @@ export default {
             this.queryArticles();
         })
         this.confirm.open = false
+    },
+    preview(id){
+        var url = "/articles/preview/"+id+"?token="+Utils.getLocal("token")
+        window.open(url, "_blank");
     }
   },
   mounted: function(){
+      this.token = Utils.getLocal("token")
       this.queryArticles()
   }
 }

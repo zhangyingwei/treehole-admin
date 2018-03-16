@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 let ajax = {
-    PREFIX: "http://localhost:5000/api/admin",
+    PREFIX: "/api/admin",
     HEADER: Utils.getAuthor() || "heyui",
     header_Content_Type: "",
     requestingApi: new Set(),
@@ -110,13 +110,17 @@ let ajax = {
                 that.deleteRequest(params.url);
                 let data = response.data;
                 let status = response.status;
-                console.log("data", data)
-                    // if (status == 200) {
-                    //     status = data.code;
-                    // }
+                let headers = response.headers
+                if (headers.from_url) {
+                    window.top.location = headers.from_url
+                }
+                // console.log("data", data)
+                // if (status == 200) {
+                //     status = data.code;
+                // }
                 if (status != 200) {
                     if (status == 401) {
-                        window.top.location = "/admin/login";
+                        window.top.location = "/vue/admin/login";
                         return;
                     }
                     if (status == 500) {
@@ -127,10 +131,10 @@ let ajax = {
                         HeyUI.$Message.error(data._msg || '请求异常');
                     }
                 }
-                console.log(data)
-                if (data.code == 999) {
+                if (data.code === 999) {
+                    console.log("请先登录")
                     HeyUI.$Message.error('请先登录');
-                    HeyUI.$router.replace('/vue/admin/login');
+                    window.top.location = "/vue/admin/login";
                 }
                 // data.ok = data.status == 200;
                 data.ok = status

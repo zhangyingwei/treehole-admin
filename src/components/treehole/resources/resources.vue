@@ -10,9 +10,10 @@
                 <div class="h-btn-group h-btn-group-l">
                     <file-upload
                           class="h-btn h-btn-primary"
-                          post-action="http://localhost:5000/admin/files/upload"
+                          post-action="/admin/files/upload"
                           extensions="gif,jpg,jpeg,png,webp,pdf"
                           accept="image/png,image/gif,image/jpeg,image/webp,application/pdf"
+                          :headers="headers"
                           :multiple="true"
                           :size="1024 * 1024 * 100"
                           v-model="files"
@@ -115,6 +116,9 @@ export default {
             name: null,
             type: null
         },
+        headers:{
+            "treehole-tocken": Utils.getLocal("token")
+        },
         files: [],
         datas: [],
         loading: false,
@@ -145,7 +149,7 @@ export default {
             if (resp.ok) {
                 if(resp.code == 200){
                     this.datas = resp.result.data.resources.map(line => {
-                        line.url = "http://localhost:5000/files/"+line.alias
+                        line.url = "/files/"+line.alias
                         // line.url = "http://"+window.location.host+"/files/"+line.alias
                         line.type = line.contentType
                         return line
@@ -229,6 +233,14 @@ export default {
       if (!newFile && oldFile) {
         // remove
         console.log('remove', oldFile)
+      }
+      if (newFile && oldFile && !newFile.active && oldFile.active) {
+        // 获得相应数据
+        console.log('response', newFile.response)
+        if (newFile.xhr) {
+          //  获得响应状态码
+          console.log('status', newFile.xhr.status)
+        }
       }
     },
     removeFile(file){

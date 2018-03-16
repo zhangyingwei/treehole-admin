@@ -59,9 +59,11 @@ const initRouter = () => {
         // } else {
         // document.title = '管理系统';
         // }
-        console.log(to.path)
-        var user = {}
-        if (!user) {
+        // console.log(to.path)
+        var user = Utils.getLocal("loginuser")
+            // console.log("user", user)
+            // console.log(user === 'null')
+        if (user === 'null') {
             if (to.path === "/vue/admin/login") {
                 next()
             } else {

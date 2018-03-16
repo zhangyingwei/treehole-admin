@@ -1,7 +1,7 @@
 <template>
   <div id="page-login">
     <div class="login-container">
-      <div class="login-title">管理系统</div>
+      <div class="login-title">TreeHole博客管理</div>
       <div class="login-name">
         <input type="text" v-model="login.username" placeholder="用户名"/>
       </div>
@@ -39,8 +39,9 @@ export default {
             this.$Message(resp.message)
             console.log(resp.result.data)
             Utils.removeLocal("token")
+            Utils.removeLocal("loginuser")
             Utils.saveLocal("token", resp.result.data);
-            Utils.saveLocal("user",self.login.username)
+            Utils.saveLocal("loginuser",self.login.username)
             this.$router.replace('/vue/admin');
           }else{
             this.$Message(resp.message)
